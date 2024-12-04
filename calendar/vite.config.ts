@@ -56,6 +56,7 @@ export default defineConfig(({ mode }) => ({
   },
   build: mode === 'web-component' ? getWebComponentConfig().build : undefined,
   server: {
+    host: process.env.HOST,
     open: false
   }
 }));

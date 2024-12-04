@@ -3,6 +3,10 @@ import { TaskList } from './components/TaskList';
 import './App.css';
 import { Counter } from './components/Counter';
 import { InfoModal } from './components/InfoModal';
+import { UserInfo } from './components/UserInfo';
+import { useEffect } from 'react';
+import { useSetAtom } from 'jotai';
+import { loadedRemotesAtom } from './lib/jotai';
 
 interface AppProps {
   apiBaseUrl: string;
@@ -11,9 +15,14 @@ interface AppProps {
 }
 
 export function App({ apiBaseUrl, basename, loadingDelay }: AppProps) {
+  const setLoadedRemotes = useSetAtom(loadedRemotesAtom);
   const toggleTask = (taskId: number) => {
     console.log('toggling task', taskId);
   };
+
+  useEffect(() => {
+    setLoadedRemotes((remotes) => ({ ...remotes, task: true }));
+  }, [setLoadedRemotes]);
 
   return (
     <BrowserRouter
@@ -29,6 +38,7 @@ export function App({ apiBaseUrl, basename, loadingDelay }: AppProps) {
       >
         <h1>Task App</h1>
         <Counter />
+        <UserInfo />
       </div>
       <h2>how to wrap a react app into a web component</h2>
       <InfoModal />

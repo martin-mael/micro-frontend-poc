@@ -9,23 +9,23 @@ const remoteApps: RemoteAppConfig[] = [
   {
     name: 'Tasks',
     routes: ['/tasks', '/tasks/*'],
-    manifestUrl: 'http://localhost:4173/manifest.wc.json',
+    manifestUrl: `https://${import.meta.env.HOST}:4173/manifest.wc.json`,
     webComponentTag: 'task-web-component',
     attributes: {
       'loading-delay': '800',
       'route-basename': '/tasks',
-      'api-baseurl': 'http://localhost:4173/api'
+      'api-baseurl': `https://${import.meta.env.HOST}:4173/api`
     }
   },
   {
     name: 'Calendar',
     routes: ['/calendar', '/calendar/*'],
-    manifestUrl: 'http://localhost:4174/manifest.wc.json',
+    manifestUrl: `https://${import.meta.env.HOST}:4174/manifest.wc.json`,
     webComponentTag: 'calendar-web-component',
     attributes: {
       'loading-delay': '1500',
       'route-basename': '/calendar',
-      'api-baseurl': 'http://localhost:4174/api'
+      'api-baseurl': `https://${import.meta.env.HOST}:4174/api`
     }
   }
 ];
