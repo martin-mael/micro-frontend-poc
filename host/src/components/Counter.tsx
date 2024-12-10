@@ -1,7 +1,5 @@
-import { atomWithBroadcast } from '@micro-frontend/shared';
 import { useAtom } from 'jotai';
-
-const countAtom = atomWithBroadcast('count', { value: 0, sentAt: new Date() });
+import { countAtom } from '../lib/jotai';
 
 export const Counter = () => {
   const [count, setCount] = useAtom(countAtom);

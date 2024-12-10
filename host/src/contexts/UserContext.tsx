@@ -1,10 +1,10 @@
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useCallback } from 'react';
 
 import Authentication, { IEDUser } from '@fulll/mui-auth';
 
 import { createContext } from './createContext';
 import { useAtom, useAtomValue } from 'jotai';
-import { loadedRemotesAtom, userAtom } from '../lib/jotai';
+import { loadedRemotesAtom, userAtom, useLoadedRemotesListener } from '../lib/jotai';
 import usePrevious from '../hooks/usePrevious';
 
 type UserContextType = {
@@ -29,7 +29,7 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
   const loadedRemotes = useAtomValue(loadedRemotesAtom);
 
   const loadedRemotesCount = Object.values(loadedRemotes).filter(Boolean).length;
-  const previousLoadedRemotesCount = usePrevious(loadedRemotesCount) ?? 0;
+  const previousLoadedRemotesCount = usePrevious(loadedRemotesCount);
 
   const [user, setUser] = useAtom(userAtom);
 
@@ -42,11 +42,17 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
     setUser(null);
   };
 
-  useEffect(() => {
-    if (loadedRemotesCount > previousLoadedRemotesCount) {
-      setUser(user);
-    }
-  }, [loadedRemotesCount, previousLoadedRemotesCount, setUser, user]);
+  useLoadedRemotesListener((_get, _set, newVal) => {
+    console.log('loadedRemotes updated', newVal);
+  });
+
+  useLoadedRemotesListener(
+    useCallback(() => {
+      if (previousLoadedRemotesCount && previousLoadedRemotesCount > loadedRemotesCount) {
+        setUser(user);
+      }
+    }, [loadedRemotesCount, previousLoadedRemotesCount, setUser, user])
+  );
 
   return (
     <UserContextProviderComponent value={{ user }}>
@@ -63,7 +69,7 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
           trackLogin: false
         }}
       >
-        {user && children}
+        {user && children}P
       </Authentication>
     </UserContextProviderComponent>
   );

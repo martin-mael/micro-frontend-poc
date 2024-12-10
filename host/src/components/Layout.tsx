@@ -6,7 +6,6 @@ import { useSpeculationRules } from '../hooks/useSpeculationRules';
 import { Counter } from './Counter';
 import { UserContextProvider } from '../contexts/UserContext';
 import { Logout } from './Logout';
-// import { usePreloadRemoteApp } from '../hooks/usePreloadRemoteApp';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -14,7 +13,6 @@ interface LayoutProps {
 }
 
 const Layout = ({ children, remoteApps }: LayoutProps) => {
-  // const { preloadManifest } = usePreloadRemoteApp();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const rootUrls = remoteApps.map((app) => app.routes[0]);
   useSpeculationRules(rootUrls);
@@ -30,14 +28,29 @@ const Layout = ({ children, remoteApps }: LayoutProps) => {
           <button onClick={() => setIsCollapsed(!isCollapsed)}>{isCollapsed ? '→' : '←'}</button>
           <nav>
             {remoteApps.map((app) => (
-              <NavLink
-                key={app.name}
-                to={app.routes[0]}
-                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-                // onMouseEnter={() => preloadManifest(app.manifestUrl)}
-              >
-                {app.name}
-              </NavLink>
+              <>
+                <NavLink
+                  key={app.name}
+                  to={app.routes[0]}
+                  className={({ isActive }) => `nav-link prerender ${isActive ? 'active' : ''}`}
+                  viewTransition
+                  reloadDocument={true}
+                >
+                  {app.name}
+                </NavLink>
+                <NavLink
+                  to={`${app.routes[0]}/build-app-as-web-component`}
+                  className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+                  onClick={() => {
+                    const event = new CustomEvent('shell_navigate', {
+                      detail: { path: `/build-app-as-web-component` }
+                    });
+                    document.dispatchEvent(event);
+                  }}
+                >
+                  2. Build
+                </NavLink>
+              </>
             ))}
           </nav>
           <Counter />

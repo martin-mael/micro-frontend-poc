@@ -10,7 +10,7 @@ import injectShadowRootPlugin from './src/plugins/injectShadowRoot';
 import createWebComponentPreviewPlugin from './src/plugins/createWebComponentPreviewPlugin';
 
 const PORTS = {
-  dev: 5173,
+  dev: 4173,
   preview: 4173
 } as const;
 const webComponentName = 'TaskWebComponent';
@@ -50,6 +50,7 @@ const getWebComponentConfig = (command: string): Partial<UserConfig> => {
           manualChunks: {
             'react-vendor': ['react', 'react-dom'],
             'router-vendor': ['react-router-dom'],
+            'mui-vendor': ['@mui/material'],
             markdown: ['react-markdown', 'rehype-highlight', 'remark-gfm']
           }
         }

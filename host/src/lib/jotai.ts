@@ -1,9 +1,31 @@
 import { IEDUser } from '@fulll/mui-auth';
-import { atomWithBroadcast } from '@micro-frontend/shared';
+import { atomWithBroadcast, atomWithCustomEvent } from '@micro-frontend/shared';
+import { useAtom } from 'jotai';
 
-export const userAtom = atomWithBroadcast<IEDUser | null>('user', null);
+export const [userAtom, useUserListener] = atomWithBroadcast<IEDUser | null>('user', null);
 
-export const loadedRemotesAtom = atomWithBroadcast<{
+export const [countAtom, useCountListener] = atomWithBroadcast('count', {
+  value: 0,
+  sentAt: new Date()
+});
+
+export const [loadedRemotesAtom, useLoadedRemotesListener] = atomWithBroadcast<{
   task: boolean;
   calendar: boolean;
 }>('loadedRemotes', { task: false, calendar: false });
+
+export const [componentAtom] = atomWithBroadcast('component-test', {
+  component: function () {
+    console.log('component');
+  }
+});
+
+export const [customEventAtom] = atomWithCustomEvent('custom-event', {
+  fn: () => {
+    console.log('custom event defined in host');
+  }
+});
+
+export const useUser = () => {
+  return useAtom(userAtom);
+};

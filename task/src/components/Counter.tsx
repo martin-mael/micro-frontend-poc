@@ -1,12 +1,14 @@
 import { atomWithBroadcast } from '@micro-frontend/shared';
 import { useAtom } from 'jotai';
+import { useLocation } from 'react-router-dom';
 
-const countAtom = atomWithBroadcast('count', { value: 0, sentAt: new Date() });
+const [countAtom] = atomWithBroadcast('count', { value: 0, sentAt: new Date() });
 
 export const Counter = () => {
+  const { pathname } = useLocation();
   const [count, setCount] = useAtom(countAtom);
 
-  console.log('count', count);
+  console.log('pathname', pathname);
 
   return (
     <button

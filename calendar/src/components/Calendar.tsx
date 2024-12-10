@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Loader } from './Loader';
 
 interface CalendarProps {
-  loadingDelay: number;
+  loadingDelay: number | undefined;
 }
 
 const getNextMonthYear = (currentYear: number, currentMonth: number) => {
